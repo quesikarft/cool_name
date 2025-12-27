@@ -2,10 +2,11 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="screen-orientation" content="landscape">
     <title>Alfa Romeo Giulia - Precision & Christmas Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* FARBEN */
         :root {
             --accent: #ff0000;
             --glass: rgba(255, 255, 255, 0.05);
@@ -16,7 +17,7 @@
             --xmas-bg: linear-gradient(180deg, #0a1420 0%, #1a2535 50%, #0d1b2a 100%);
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
@@ -28,6 +29,13 @@
 
         body.xmas-on { background: var(--xmas-bg); }
 
+        .orientation-hint {
+            position: fixed; inset: 0; z-index: 9999; background: #000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: #fff; text-align: center; font-size: 3vh; display: none;
+        }
+        .orientation-hint.show { display: flex; }
+
         #theme-toggle {
             position: fixed; top: 2vh; right: 2vw; z-index: 2000;
             display: flex; align-items: center; gap: 0.8rem;
@@ -35,13 +43,9 @@
             letter-spacing: 0.1vw; font-weight: 900;
             padding: 0.5vw 1vw; border-radius: 30px;
             background: rgba(0,0,0,0.6); border: 1px solid var(--accent);
-            backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
+            backdrop-filter: blur(5px); transition: all 0.3s ease;
         }
-        body.xmas-on #theme-toggle {
-            border-color: var(--xmas-silver);
-            background: rgba(13, 27, 42, 0.6);
-        }
+        body.xmas-on #theme-toggle { border-color: var(--xmas-silver); background: rgba(13, 27, 42, 0.6); }
         
         .switch { position: relative; display: inline-block; width: 42px; height: 24px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -51,8 +55,7 @@
         }
         .slider:before {
             position: absolute; content: ""; height: 16px; width: 16px;
-            left: 4px; bottom: 4px; background-color: white;
-            transition: .4s; border-radius: 50%;
+            left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;
         }
         input:checked + .slider { background-color: var(--xmas-accent); }
         input:checked + .slider:before { transform: translateX(18px); }
@@ -68,44 +71,27 @@
                 radial-gradient(circle at 70% 80%, var(--xmas-silver) 0%, transparent 50%);
         }
 
-        #bg-text-layer {
-            position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none;
-        }
-        
+        #bg-text-layer { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; }
         #bg-text-layer::after {
             content: ""; position: absolute; width: 200%; height: 200%;
             background-image: linear-gradient(0deg, transparent 24%, rgba(255, 0, 0, 0.05) 25%, rgba(255, 0, 0, 0.05) 26%, transparent 27%, transparent),
                               linear-gradient(90deg, transparent 24%, rgba(255, 0, 0, 0.05) 25%, rgba(255, 0, 0, 0.05) 26%, transparent 27%, transparent);
-            background-size: 50px 50px; animation: gridMove 20s linear infinite; opacity: 0.3;
-            transition: opacity 0.5s;
+            background-size: 50px 50px; animation: gridMove 20s linear infinite; opacity: 0.3; transition: opacity 0.5s;
         }
         body.xmas-on #bg-text-layer::after { opacity: 0; } 
         
         #bg-text {
             position: absolute; top: 10vh; left: 50%; transform: translateX(-50%);
-            text-align: center; width: 100%;
-            transition: all 0.8s ease;
-            z-index: 1;
+            text-align: center; width: 100%; transition: all 0.8s ease; z-index: 1;
         }
 
         .text-sport {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2vw, 4vh, 5vw);
-            font-weight: 900;
-            color: rgb(255, 255, 255);
-            letter-spacing: 0.5vw;
-            text-transform: uppercase;
-            text-shadow: 0 0 30px rgba(255,0,0,0.2);
+            font-size: clamp(2vw, 4vh, 5vw); font-weight: 900; color: white;
+            letter-spacing: 0.5vw; text-transform: uppercase; text-shadow: 0 0 30px rgba(255,0,0,0.2);
         }
-
         .text-xmas {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2vw, 4vh, 5vw);
-            text-transform: uppercase;
-            font-weight: 900;
-            color: var(--xmas-silver);
-            letter-spacing: 0.5vw;
-            text-shadow: 0 0 25px var(--xmas-accent);
+            font-size: clamp(2vw, 4vh, 5vw); font-weight: 900; color: var(--xmas-silver);
+            letter-spacing: 0.5vw; text-transform: uppercase; text-shadow: 0 0 25px var(--xmas-accent);
             animation: winterGlow 4s ease-in-out infinite alternate;
         }
 
@@ -115,25 +101,12 @@
             to { text-shadow: 0 0 30px var(--xmas-accent), 0 0 50px var(--xmas-silver), 0 0 70px #fff; }
         }
 
-        #snow { 
-            position: fixed; inset: 0; pointer-events: none; z-index: 100;
-            display: none; width: 100vw; height: 100vh;
-            z-index: 1;
-        }
+        #snow { position: fixed; inset: 0; pointer-events: none; z-index: 1; display: none; width: 100vw; height: 100vh; }
         body.xmas-on #snow { display: block; }
-        
         .snowflake {
-            position: absolute; 
-            top: -5vh; 
-            color: #e8f4fd; 
-            font-size: clamp(10px, 1.5vw, 25px);
-            animation-name: snowfall;
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
-            opacity: 0.8;
-            text-shadow: 0 0 5px rgba(255,255,255,0.8);
+            position: absolute; top: -5vh; color: #e8f4fd; font-size: clamp(10px, 1.5vw, 25px);
+            animation: snowfall linear infinite; opacity: 0.8; text-shadow: 0 0 5px rgba(255,255,255,0.8);
         }
-        
         @keyframes snowfall {
             0% { transform: translateY(0) rotate(0deg); opacity: 0; }
             10% { opacity: 1; }
@@ -146,70 +119,57 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             color: #fff; transition: opacity 0.9s, transform 0.9s, background 0.8s;
         }
-        body.xmas-on #loading-screen {
-            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0a1420 100%);
-        }
+        body.xmas-on #loading-screen { background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0a1420 100%); }
         #loading-screen.hide { opacity: 0; transform: scale(1.04); pointer-events: none; }
 
         .loading-title {
             font-size: clamp(1.6vw, 4vh, 4vw); letter-spacing: 0.5vw; margin-bottom: 1vw;
             color: var(--accent); text-shadow: 0 0 15px var(--accent); transition: all 0.5s;
-            font-family: 'Orbitron', sans-serif; text-align: center;
         }
-        body.xmas-on .loading-title {
-            color: var(--xmas-silver); text-shadow: 0 0 20px var(--xmas-silver);
-        }
+        body.xmas-on .loading-title { color: var(--xmas-silver); text-shadow: 0 0 20px var(--xmas-silver); }
 
         .loading-sub {
             font-size: 1.2vw; letter-spacing: 0.3vw; margin-bottom: 2vw;
             color: #fff; opacity: 0.8; text-transform: uppercase; transition: all 0.5s;
-            font-family: 'Orbitron', sans-serif; text-align: center;
         }
-        body.xmas-on .loading-sub { 
-            color: var(--xmas-accent); opacity: 1;
-        }
+        body.xmas-on .loading-sub { color: var(--xmas-accent); opacity: 1; }
 
         .loading-bar {
             width: 26vw; height: 0.4vw; border-radius: 999px;
             background: rgba(255,255,255,0.06); overflow: hidden; position: relative;
             box-shadow: 0 0 20px rgba(255,0,0,0.4); border: none; transition: all 0.5s;
         }
-        body.xmas-on .loading-bar {
-            box-shadow: 0 0 30px var(--xmas-accent); border: 2px solid var(--xmas-silver);
-        }
+        body.xmas-on .loading-bar { box-shadow: 0 0 30px var(--xmas-accent); border: 2px solid var(--xmas-silver); }
 
         .loading-fill {
             position: absolute; inset: 0; width: 0%;
             background: linear-gradient(90deg, #770000, #ff0000, #ffffff);
             animation: loadFill 4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
-        body.xmas-on .loading-fill {
-            background: linear-gradient(90deg, var(--xmas-accent), var(--xmas-silver), #fff);
-        }
+        body.xmas-on .loading-fill { background: linear-gradient(90deg, var(--xmas-accent), var(--xmas-silver), #fff); }
         @keyframes loadFill { 0% { width: 0%; } 100% { width: 100%; } }
 
         .loading-press {
             margin-top: 2.5vw; font-size: 1vw; letter-spacing: 0.2vw; text-transform: uppercase;
-            padding: 0.8vw 1.8vw; border-radius: 999px;
+            padding: 0.8vw 1.8vw; border-radius: 999px; cursor: pointer;
             border: 1px solid var(--accent); background: rgba(0,0,0,0.8);
             display: flex; align-items: center; gap: 0.7vw;
             animation: pulse 1.4s ease-in-out infinite alternate;
-            transition: all 0.5s;
-            backdrop-filter: blur(12px);
+            transition: all 0.5s; backdrop-filter: blur(12px);
         }
-        body.xmas-on .loading-press {
-            border: 2px solid var(--xmas-silver); background: rgba(0,0,0,0.4);
-        }
+        body.xmas-on .loading-press { border: 2px solid var(--xmas-silver); background: rgba(0,0,0,0.4); }
+        
+        .loading-press:hover, .loading-press:active { transform: scale(1.05); box-shadow: 0 0 25px var(--accent); }
+        body.xmas-on .loading-press:hover { box-shadow: 0 0 25px var(--xmas-accent); }
+
         .loading-press .key {
             border-radius: 6px; padding: 0.3vw 0.9vw; border: 1px solid rgba(255,255,255,0.3);
             background: rgba(255,255,255,0.1); font-weight: 900;
         }
-
         @keyframes pulse { from { opacity: 0.5; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
         .start-explosion {
-            position: fixed; inset: 0; z-index: 2000; pointer-events: none;
-            opacity: 0; visibility: hidden;
+            position: fixed; inset: 0; z-index: 2000; pointer-events: none; opacity: 0; visibility: hidden;
         }
         .start-explosion.show {
             opacity: 1; visibility: visible;
@@ -217,9 +177,7 @@
         }
         @keyframes explosion {
             0% { transform: scale(0.1) rotate(0deg); filter: blur(20px) brightness(0); }
-            20% { transform: scale(1.2) rotate(180deg); filter: blur(5px) brightness(3); }
-            40% { transform: scale(1.5) rotate(360deg); filter: blur(2px) brightness(2); }
-            60% { transform: scale(1.8) rotate(540deg); filter: blur(1px) brightness(1.5); }
+            50% { transform: scale(1.5) rotate(360deg); filter: blur(2px) brightness(2); }
             100% { transform: scale(3) rotate(720deg); filter: blur(0px) brightness(0); opacity: 0; }
         }
 
@@ -239,21 +197,10 @@
             box-shadow: 0 0 60px rgba(0, 191, 255, 0.4), inset 0 0 60px rgba(192, 192, 192, 0.15);
         }
 
-        /* WACKEL EFFEKTE*/
-        .gas-mild { animation: tachoShakeMild 0.18s infinite; }
-        .gas-medium { animation: tachoShakeMedium 0.14s infinite; }
-        .gas-hard { animation: tachoShakeHard 0.10s infinite; }
         .gas-insane { animation: tachoShakeInsane 0.08s infinite; }
-
-        @keyframes tachoShakeMild { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(1px, -0.5px); } 75% { transform: translate(-1px, 0.5px); } }
-        @keyframes tachoShakeMedium { 0%, 100% { transform: translate(0,0); } 25% { transform: translate(1.5px, -1px); } 50% { transform: translate(-1.5px, 1px); } 75% { transform: translate(1px, -1.5px); } }
-        @keyframes tachoShakeHard { 0% { transform: translate(0,0); } 25% { transform: translate(2px, -1px); } 50% { transform: translate(-2px, 1px); } 75% { transform: translate(1px, -2px); } }
         @keyframes tachoShakeInsane { 
-            0% { transform: translate(0,0) rotate(0deg); } 
-            25% { transform: translate(3px, -3px) rotate(1deg); } 
-            50% { transform: translate(-3px, 3px) rotate(-1deg); } 
-            75% { transform: translate(-3px, -3px) rotate(0deg); } 
-            100% { transform: translate(3px, 3px) rotate(0deg); }
+            0% { transform: translate(0,0) rotate(0deg); } 25% { transform: translate(2px, -2px) rotate(1deg); } 
+            75% { transform: translate(-2px, 2px) rotate(-1deg); } 100% { transform: translate(0,0) rotate(0deg); }
         }
 
         .fact-card {
@@ -265,14 +212,25 @@
         body.xmas-on .fact-card {
             border-left-color: var(--xmas-silver);
         }
-        .fact-card h3 { font-size: 0.7vw; margin: 0; color: var(--accent); letter-spacing: 2px; transition: color 0.5s; }
-        body.xmas-on .fact-card h3 { color: var(--xmas-silver); text-shadow: 0 0 12px var(--xmas-silver); }
-        .fact-card p { font-size: 0.9vw; margin: 5px 0 0; opacity: 0.8; }
-        
-        #fact-1 { left: 5%; top: 15%; }
-        #fact-2 { right: 5%; top: 15%; text-align: right; border-left: none; border-right: 3px solid var(--accent); }
-        body.xmas-on #fact-2 { border-right-color: var(--xmas-silver); }
+        .fact-card h3 { 
+            font-size: 0.7vw; margin: 0; color: var(--accent); 
+            letter-spacing: 2px; transition: color 0.5s; 
+        }
+        body.xmas-on .fact-card h3 { 
+            color: var(--xmas-silver); text-shadow: 0 0 12px var(--xmas-silver); 
+        }
+        .fact-card p { 
+            font-size: 0.9vw; margin: 5px 0 0; opacity: 0.8; 
+        }
 
+        #fact-1 { left: 5%; top: 15%; }
+        #fact-2 { 
+            right: 5%; top: 15%; text-align: right; 
+            border-left: none; border-right: 3px solid var(--accent); 
+        }
+        body.xmas-on #fact-2 { 
+            border-right-color: var(--xmas-silver); 
+        }
         .gauge-center { position: absolute; width: 1px; height: 1px; z-index: 5; }
         #left-gauge { left: 27%; top: 56%; }
         #right-gauge { right: 26.1%; top: 56%; }
@@ -281,29 +239,16 @@
             position: absolute; width: 0.4vw; height: 7vw;
             background: linear-gradient(to top, #c0c0c0 0%, #fff 70%, transparent 100%);
             transform-origin: bottom center; bottom: 0; left: -0.2vw;
-            transition: box-shadow 0.3s ease;
             box-shadow: 0 0 25px rgba(192, 192, 192, 0.9);
         }
-        body.xmas-on .needle {
-            box-shadow: 0 0 25px rgba(192, 192, 192, 0.9);
-        }
-        /*SCHWANZ hehehehehhehehehehhehehehehehhehehehhehehehehheheheheheh*/
         .needle::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 2.9vw;
+            content: ""; position: absolute; top: 100%; left: 0; width: 100%; height: 2.9vw;
             background: linear-gradient(to bottom, #c0c0c0 0%, rgba(255,255,255,0.2) 60%, transparent 100%);
-            box-shadow: 0 0 15px rgba(192, 192, 192, 0.5);
-            border-radius: 0 0 2px 2px;
         }
-
 
         #hologram-viewport {
-            position: absolute; top: 50%; left: 50.7%; transform: translate(-50%, -50%);
-            width: 18%; height: 30%; z-index: 20; cursor: grab;
+            position: absolute; top: 51.5%; left: 50.7%; transform: translate(-50%, -50%);
+            width: 18%; height: 24%; z-index: 20; cursor: grab;
         }
 
         #hologram-data {
@@ -313,43 +258,40 @@
         .data-box {
             background: rgba(0,0,0,0.8); border: 1px solid var(--accent);
             padding: 0.5vw 1.5vw; border-radius: 4px; display: flex; flex-direction: column; align-items: center;
-            min-width: 6vw; box-shadow: 0 0 15px var(--glow); transition: all 0.5s;
+            min-width: 6vw; box-shadow: 0 0 15px var(--glow);
         }
-        body.xmas-on .data-box {
-            border-color: var(--xmas-silver);
-            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
-        }
-        .data-box span { font-size: 0.6vw; color: #aaa; transition: color 0.5s; }
-        body.xmas-on .data-box span { color: var(--xmas-silver); }
-        
-        .data-box b { 
-            font-size: 2.2vw; color: #fff; 
-            text-shadow: none !important; 
-            transition: text-shadow 0.5s; 
-        }
-        body.xmas-on .data-box b { color: var(--xmas-silver); }
+        body.xmas-on .data-box { border-color: var(--xmas-silver); box-shadow: 0 0 20px rgba(0, 191, 255, 0.3); }
+        .data-box span { font-size: 0.6vw; color: #aaa; }
+        .data-box b { font-size: 2.2vw; color: #fff; }
 
-        .limit-flicker { 
-            color: #ff0000 !important;
-            text-shadow: 0 0 10px red !important;
-            animation: flicker 0.1s infinite;
-        }
-        @keyframes flicker { 
-            0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; }
-        }
+        .limit-flicker { color: #ff0000 !important; text-shadow: 0 0 10px red !important; animation: flicker 0.1s infinite; }
+        @keyframes flicker { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
 
         #drive-hint {
             position: fixed; bottom: 3vh; left: 50%; transform: translateX(-50%);
-            padding: 0.6vw 1.8vw; border-radius: 999px;
+            padding: 0.6vw 1.8vw; border-radius: 999px; cursor: pointer;
             border: 1px solid var(--accent); background: rgba(0,0,0,0.8);
             color: #fff; font-size: 0.9vw; display: flex; align-items: center; gap: 0.7vw;
-            z-index: 60; opacity: 0.7; transition: all 0.5s;
+            z-index: 60; opacity: 0.7; transition: all 0.3s;
+            backdrop-filter: blur(12px);
         }
-        body.xmas-on #drive-hint {
-            border-color: var(--xmas-silver);
+
+        #drive-hint:hover, #drive-hint:active {
             opacity: 1;
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 0 25px var(--accent);
+        }
+
+        body.xmas-on #drive-hint {
+            border: 2px solid var(--xmas-silver);
+            background: rgba(0,0,0,0.4);
             box-shadow: 0 0 20px rgba(0,191,255,0.4);
         }
+
+        body.xmas-on #drive-hint:hover {
+            box-shadow: 0 0 25px var(--xmas-accent);
+        }
+
         #drive-hint .key {
             border: 1px solid #fff; padding: 2px 8px; border-radius: 4px; font-weight: bold;
         }
@@ -361,8 +303,9 @@
 </head>
 <body>
     <div class="orientation-hint" id="orientation-hint">
-        <div>Bite 90 Drehen</div>
+        <div><b>Bitte drehen</b><br>↻</div>
     </div>
+
     <div id="theme-toggle">
         <span id="theme-label">Switch</span>
         <label class="switch">
@@ -373,53 +316,31 @@
 
     <div class="start-explosion" id="start-explosion"></div>
     <div id="bg-animation"></div>
-    
-    <div id="bg-text-layer">
-        <div id="bg-text"></div>
-    </div>
-    
+    <div id="bg-text-layer"><div id="bg-text"></div></div>
     <div id="snow"></div>
 
     <div id="loading-screen">
         <div class="loading-title">ALFA ROMEO</div>
         <div class="loading-sub">Precision Cockpit</div>
-        <div class="loading-bar">
-            <div class="loading-fill"></div>
-        </div>
-        <div class="loading-press" id="space-button">
+        <div class="loading-bar"><div class="loading-fill"></div></div>
+        <div class="loading-press" id="start-button">
             Drücke <span class="key" style="margin: 0 5px;">LEERTASTE</span> zum Starten
         </div>
     </div>
 
     <div id="master-container">
         <div id="tacho-bg">
-            <div class="gauge-center" id="left-gauge">
-                <div class="needle" id="needle-rpm"></div>
-            </div>
-            <div class="gauge-center" id="right-gauge">
-                <div class="needle" id="needle-speed"></div>
-            </div>
+            <div class="gauge-center" id="left-gauge"><div class="needle" id="needle-rpm"></div></div>
+            <div class="gauge-center" id="right-gauge"><div class="needle" id="needle-speed"></div></div>
             <div id="hologram-viewport"></div>
             <div id="hologram-data">
-                <div class="data-box">
-                    <span>GANG</span>
-                    <b id="gear">P</b>
-                </div>
-                <div class="data-box">
-                    <span>KM/H</span>
-                    <b id="speed-digital">0</b>
-                </div>
+                <div class="data-box"><span>GANG</span><b id="gear">P</b></div>
+                <div class="data-box"><span>KM/H</span><b id="speed-digital">0</b></div>
             </div>
         </div>
 
-        <div class="fact-card" id="fact-1">
-            <h3>QUADRIFOGLIO</h3>
-            <p>2.9L V6 Bi-Turbo<br>510 PS</p>
-        </div>
-        <div class="fact-card" id="fact-2">
-            <h3>PERFORMANCE</h3>
-            <p>0-100: 3.9s<br>Max: 300+ km/h</p>
-        </div>
+        <div class="fact-card" id="fact-1"><h3>QUADRIFOGLIO</h3><p>2.9L V6 Bi-Turbo<br>510 PS</p></div>
+        <div class="fact-card" id="fact-2"><h3>PERFORMANCE</h3><p>0-100: 3.9s<br>Max: 300+ km/h</p></div>
     </div>
 
     <div id="drive-hint">
@@ -440,19 +361,16 @@
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        // VARIABLEN
-        let speed = 0;      
-        let rpm = 800;      
-        let isPressing = false; 
+        let speed = 0;
+        let rpm = 800;
+        let isPressing = false;
+        let pointerDown = false;
         let gameStarted = false;
-        let audioCtx, mainOsc, subOsc, gainNode, lowPass; 
-        let carModel, controls;
         let modelLoaded = false;
         let loadingComplete = false;
-        let pointerDown = false;
-        let controlsActive = false;
+        let audioCtx, mainOsc, subOsc, gainNode, lowPass; 
+        let carModel, controls;
 
-        // SHIT HOLLEN//
         const speedDisplay = document.getElementById('speed-digital');
         const gearDisplay = document.getElementById('gear');
         const driveHint = document.getElementById('drive-hint');
@@ -465,281 +383,192 @@
         const loadSub = document.querySelector('.loading-sub');
         const bgText = document.getElementById('bg-text');
         const startExplosion = document.getElementById('start-explosion');
-        const spaceButton = document.getElementById('space-button');
+        const startButton = document.getElementById('start-button');
         const orientationHint = document.getElementById('orientation-hint');
-
-        // SCHNEEEEEEEEEE//
-        function generateSnow() {
-            const snowContainer = document.getElementById('snow');
-            snowContainer.innerHTML = '';
-            for (let i = 0; i < 70; i++) {
-                let flake = document.createElement('div');
-                flake.className = 'snowflake';
-                flake.innerHTML = '❄️';
-                flake.style.left = Math.random() * 100 + 'vw';
-                flake.style.fontSize = (Math.random() * 1.5 + 0.5) + 'vw';
-                flake.style.animationDuration = (Math.random() * 5 + 4) + 's';
-                flake.style.animationDelay = Math.random() * 5 + 's';
-                snowContainer.appendChild(flake);
-            }
-        }
         
-        function removeSnow() {
-            const snowContainer = document.getElementById('snow');
-            snowContainer.innerHTML = '';
-        }
-
-        // THEME SWITCH//
-        function updateTexts(isXmas) {
-            if(isXmas) {
-                themeLabel.textContent = 'Schnee';
-                loadTitle.textContent = 'Für Papa';
-                loadSub.textContent = 'Von Julius';
-                bgText.textContent = 'Alles Gute zu Weihnachten Papa';
-                bgText.className = 'text-xmas';
-                generateSnow();
-            } else {
-                themeLabel.textContent = 'Default';
-                loadTitle.textContent = 'SYSTEM ACTIVE';
-                loadSub.textContent = 'READY FOR TAKEOFF OR SMETHIN LIKE THAT';
-                bgText.textContent = 'Alfa Romeo Giulia Quadrifoglio';
-                bgText.className = 'text-sport';
-                removeSnow();
-            }
-        }
-
-        const savedTheme = localStorage.getItem('xmasTheme');
-        if (savedTheme === 'on') {
-            document.body.classList.add('xmas-on');
-            xmasSwitch.checked = true;
-            updateTexts(true);
-        } else {
-            updateTexts(false);
-        }
-
-        xmasSwitch.addEventListener('change', () => {
-            if (xmasSwitch.checked) {
-                document.body.classList.add('xmas-on');
-                localStorage.setItem('xmasTheme', 'on');
-                updateTexts(true);
-            } else {
-                document.body.classList.remove('xmas-on');
-                localStorage.setItem('xmasTheme', 'off');
-                updateTexts(false);
-            }
-        });
-
-        // AUDIO//
-        document.addEventListener('visibilitychange', () => {
-            if (audioCtx) {
-                if (document.hidden) audioCtx.suspend();
-                else audioCtx.resume();
-            }
-        });
-
-        function initAudio() {
-            if (audioCtx) return;
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            mainOsc = audioCtx.createOscillator();
-            subOsc = audioCtx.createOscillator();
-            gainNode = audioCtx.createGain();
-            lowPass = audioCtx.createBiquadFilter();
-
-            mainOsc.type = 'sawtooth'; subOsc.type = 'square'; lowPass.type = 'lowpass';
-            mainOsc.connect(lowPass); subOsc.connect(lowPass);
-            lowPass.connect(gainNode); gainNode.connect(audioCtx.destination);
-            mainOsc.start(); subOsc.start();
-            gainNode.gain.value = 0;
-        }
-
-        // HANDY QUER CHECK//
-        function checkOrientation() {
-            if (window.innerHeight > window.innerWidth) {
-                orientationHint.classList.add('show');
-            } else {
-                orientationHint.classList.remove('show');
-            }
-        }
-        window.addEventListener('resize', checkOrientation);
-        window.addEventListener('orientationchange', checkOrientation);
-        checkOrientation();
-
-        // START GAME CHECKER//
-        function startGameIfNeeded() {
+        function tryStartGame() {
             if (!gameStarted && modelLoaded) {
                 gameStarted = true;
                 initAudio();
                 startExplosion.classList.add('show');
                 setTimeout(() => startExplosion.classList.remove('show'), 1200);
+                
                 document.getElementById('loading-screen').classList.add('hide');
                 document.getElementById('master-container').classList.add('show');
+                
                 loadingComplete = true;
+
                 isPressing = false;
-                controls.enableRotate = true;
-                controls.enableZoom = true;
+                pointerDown = false;
+
+                if (controls) {
+                    controls.enableRotate = true;
+                    controls.enableZoom = true;
+                }
             }
         }
-        function handleInputHold() {
-    if (loadingComplete) isPressing = true;
-}
 
-function handleInputEnd() {
-    isPressing = false;
-}
-        // SPACE BUTTON EVENTS//
-spaceButton.addEventListener('pointerdown', (e) => {
-  // nur Button zählt – nix global
-  e.preventDefault();
-  e.stopPropagation();
+        document.addEventListener('visibilitychange', () => {
+            if (audioCtx) {
+                if (document.hidden) {
+                    audioCtx.suspend();
+                } else {
+                    audioCtx.resume();
+                }
+            }
+        });
 
-  pointerDown = true;
-  startGameIfNeeded();
-});
+        startButton.addEventListener('pointerdown', (e) => {
+            e.preventDefault(); 
+            e.stopPropagation();
+            tryStartGame();
+        });
 
-spaceButton.addEventListener('pointerup', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  pointerDown = false;
-});
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !gameStarted) {
+                e.preventDefault();
+                tryStartGame();
+            }
+        });
 
-document.addEventListener('keydown', (e) => {
-    if (e.code === 'Space') {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        startGameIfNeeded();
-        isPressing = true;
-    }
-}, true);
+        driveHint.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            if (gameStarted) pointerDown = true;
+        });
+        
+        driveHint.addEventListener('pointerup', (e) => {
+            e.preventDefault(); 
+            pointerDown = false;
+        });
 
-document.addEventListener('keyup', (e) => {
-    if (e.code === 'Space') {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        isPressing = false;
-    }
-}, true);
+        driveHint.addEventListener('pointerleave', (e) => {
+            e.preventDefault(); 
+            pointerDown = false;
+        });
 
-        // PHYSICS REAL LIFE TRUST//
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && gameStarted) {
+                isPressing = true;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.code === 'Space') {
+                isPressing = false;
+            }
+        });
+
         function updatePhysics() {
             if (!loadingComplete) {
                 requestAnimationFrame(updatePhysics);
                 return;
             }
 
-            const SKALA_ENDE_BILD = 7000;  
-            const ECHTER_LIMITER = 7250;   
+            const isGasActive = (isPressing || pointerDown);
 
             const idleRpm = 850;
             const dragCoefficient = 0.0000210; 
             const motorPowerFactor = 7.3;     
             const friction = 0.04;            
 
-if ((isPressing || pointerDown) && gameStarted) {
+            if (isGasActive) {
                 let engineForce = motorPowerFactor * (1.0 - (speed / 450)); 
                 let airDrag = (speed * speed) * dragCoefficient;
-                let netAccel = engineForce - airDrag - friction;
-                speed = Math.max(0, speed + netAccel * 0.18); 
+                speed = Math.max(0, speed + (engineForce - airDrag - friction) * 0.18); 
             } else {
                 let coastingDrag = (speed * speed * dragCoefficient) + 0.6;
                 speed = Math.max(0, speed - coastingDrag * 0.12);
             }
 
-            const gearRatios = [11.2, 17.5, 25.1, 31.5, 40.8, 51.0, 60.3, 76.0];
-            
             let gearIdx = 1;
             if (speed > 238) gearIdx = 6; 
             else if (speed > 188) gearIdx = 5;
             else if (speed > 145) gearIdx = 4;
             else if (speed > 95) gearIdx = 3;
             else if (speed > 55) gearIdx = 2;
-            else gearIdx = 1;
             
             let displayGear = speed < 2 ? "P" : gearIdx;
-
+            
+            const gearRatios = [11.2, 17.5, 25.1, 31.5, 40.8, 51.0, 60.3, 76.0];
             let ratio = gearRatios[gearIdx - 1];
             let targetRpm = Math.max(idleRpm, (speed / ratio) * 1000);
 
+            const ECHTER_LIMITER = 7250;
             let isLimiting = (targetRpm >= ECHTER_LIMITER) || (speed >= 308);
 
             if (isLimiting) {
                 targetRpm = ECHTER_LIMITER - 40 + Math.random() * 80;
                 speed -= 0.4; 
-                
-                if (speedDisplay) speedDisplay.classList.add('limit-flicker');
-                if (gearDisplay) gearDisplay.classList.add('limit-flicker');
+                speedDisplay.classList.add('limit-flicker');
+                gearDisplay.classList.add('limit-flicker');
             } else {
-                if (speedDisplay) speedDisplay.classList.remove('limit-flicker');
-                if (gearDisplay) gearDisplay.classList.remove('limit-flicker');
+                speedDisplay.classList.remove('limit-flicker');
+                gearDisplay.classList.remove('limit-flicker');
             }
 
             rpm = rpm + (targetRpm - rpm) * 0.35;
 
-            const RPM_START_DEG = -230;  
-            const RPM_END_DEG   = 155; 
-            
-            const SPEED_START_DEG = -177.5; 
-            const SPEED_END_DEG   = 150;  
-            const SKALA_MAX_SPEED = 325;
+            updateNeedles(rpm, speed, isLimiting);
+            speedDisplay.innerText = Math.floor(speed);
+            gearDisplay.innerText = displayGear;
 
-            let time = Date.now();
+            if (speed > 300) tachoBg.className = 'gas-insane'; 
+            else tachoBg.className = '';
 
-            if (needleLeft) {
-                const rpmRange = RPM_END_DEG - RPM_START_DEG;
-                let rpmDeg = RPM_START_DEG + (rpm / SKALA_ENDE_BILD) * rpmRange;
-                
-                if (isLimiting ) {
-                    let wave = Math.sin(time / 30) * 0.1 + Math.cos(time / 80) * 0.3;
-                    rpmDeg += wave; 
-                }
-                
-                needleLeft.style.transform = `rotate(${rpmDeg}deg)`;
-            }
-
-            if (needleRight) {
-                const speedRange = SPEED_END_DEG - SPEED_START_DEG;
-                let speedDeg = SPEED_START_DEG + (speed / SKALA_MAX_SPEED) * speedRange;
-                
-                speedDeg += Math.sin(time / 50) * 0.12 + Math.cos(time / 80) * 0.08;
-                
-                needleRight.style.transform = `rotate(${speedDeg.toFixed(1)}deg)`;
-            }
-
-            if (speedDisplay) speedDisplay.innerText = Math.floor(speed);
-            if (gearDisplay) gearDisplay.innerText = displayGear;
-
-            if (speed > 10) {
-                if (speed > 300) tachoBg.className = 'gas-insane'; 
-                else if (speed > 200) tachoBg.className = 'gas-hard';
-                else tachoBg.className = 'gas-mild';
-            } else {
-                tachoBg.className = '';
-            }
-
-            if (audioCtx && !document.hidden) { 
-                let freq = 48 + (rpm / 16.5);
-                mainOsc.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.04);
-                subOsc.frequency.setTargetAtTime(freq / 2.02, audioCtx.currentTime, 0.04); 
-                lowPass.frequency.setTargetAtTime(400 + (rpm / 2.3), audioCtx.currentTime, 0.08);
-                
-                let vol;
-                if (isPressing) {
-                    vol = 0.36; 
-                } else {
-                    vol = (speed > 5) ? 0.15 : 0.05; 
-                }
-
-                if (isLimiting) {
-                    vol *= (Date.now() % 50 > 25) ? 1.1 : 0.15;
-                }
-                gainNode.gain.setTargetAtTime(vol, audioCtx.currentTime, 0.06);
-            } else if (audioCtx) {
-                gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
-            }
+            updateSound(rpm, isGasActive, isLimiting);
 
             requestAnimationFrame(updatePhysics);
         }
 
-        // 3D MODEL CHECK CHECK//
+        function updateNeedles(rpm, speed, isLimiting) {
+            const RPM_START = -230, RPM_END = 155, RPM_MAX = 7000;
+            const SPEED_START = -177.5, SPEED_END = 155, SPEED_MAX = 325;
+            let time = Date.now();
+
+            let rpmDeg = RPM_START + (rpm / RPM_MAX) * (RPM_END - RPM_START);
+            if (isLimiting) rpmDeg += Math.sin(time / 30) * 0.1 + Math.cos(time / 80) * 0.3;
+            needleLeft.style.transform = `rotate(${rpmDeg}deg)`;
+
+            let speedDeg = SPEED_START + (speed / SPEED_MAX) * (SPEED_END - SPEED_START);
+            speedDeg += Math.sin(time / 50) * 0.12;
+            needleRight.style.transform = `rotate(${speedDeg.toFixed(1)}deg)`;
+        }
+
+        function initAudio() {
+            if (audioCtx) return;
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            mainOsc = audioCtx.createOscillator();
+            subOsc = audioCtx.createOscillator();
+            gainNode = audioCtx.createGain();
+            lowPass = audioCtx.createBiquadFilter();
+
+            mainOsc.type = 'sawtooth'; 
+            subOsc.type = 'square'; 
+            lowPass.type = 'lowpass';
+            mainOsc.connect(lowPass); 
+            subOsc.connect(lowPass);
+            lowPass.connect(gainNode); 
+            gainNode.connect(audioCtx.destination);
+            mainOsc.start(); 
+            subOsc.start();
+            gainNode.gain.value = 0;
+        }
+
+        function updateSound(rpm, isGasActive, isLimiting) {
+            if (!audioCtx || document.hidden) return;
+            
+            let freq = 48 + (rpm / 16.5);
+            mainOsc.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.04);
+            subOsc.frequency.setTargetAtTime(freq / 2.02, audioCtx.currentTime, 0.04); 
+            lowPass.frequency.setTargetAtTime(400 + (rpm / 2.3), audioCtx.currentTime, 0.08);
+            
+            let vol = isGasActive ? 0.36 : ((speed > 5) ? 0.15 : 0.05);
+            if (isLimiting) vol *= (Date.now() % 50 > 25) ? 1.1 : 0.15;
+            
+            gainNode.gain.setTargetAtTime(vol, audioCtx.currentTime, 0.06);
+        }
+
         const viewport = document.getElementById('hologram-viewport');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, viewport.clientWidth / viewport.clientHeight, 0.1, 100);
@@ -758,7 +587,6 @@ if ((isPressing || pointerDown) && gameStarted) {
         controls.maxDistance = 10;
         
         scene.add(new THREE.AmbientLight(0xffffff, 2.5));
-        
         const carLight = new THREE.DirectionalLight(0xffffff, 5);
         carLight.position.set(5, 5, 5);
         scene.add(carLight);
@@ -770,21 +598,76 @@ if ((isPressing || pointerDown) && gameStarted) {
             carModel.scale.set(0.9, 0.9, 0.9);
             scene.add(carModel);
             modelLoaded = true;
-        }, undefined, (error) => {
-            console.error('3D Model Error:', error);
-        });
-
-        window.addEventListener('resize', () => {
-            camera.aspect = viewport.clientWidth / viewport.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(viewport.clientWidth, viewport.clientHeight);
-        });
+        }, undefined, (err) => console.error('3D Error:', err));
 
         function animate3D() {
             requestAnimationFrame(animate3D);
             if (controls) controls.update(); 
             if (carModel) carModel.rotation.y += 0.005; 
             renderer.render(scene, camera);
+        }
+
+        function checkOrientation() {
+            if (!orientationHint) return;
+            if (window.innerHeight > window.innerWidth) orientationHint.classList.add('show');
+            else orientationHint.classList.remove('show');
+        }
+
+        window.addEventListener('resize', () => {
+            checkOrientation();
+            camera.aspect = viewport.clientWidth / viewport.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+        });
+
+        window.addEventListener('orientationchange', checkOrientation);
+
+        function generateSnow() {
+            const snowContainer = document.getElementById('snow');
+            snowContainer.innerHTML = '';
+            for (let i = 0; i < 70; i++) {
+                let flake = document.createElement('div');
+                flake.className = 'snowflake';
+                flake.innerHTML = '❄️';
+                flake.style.left = Math.random() * 100 + 'vw';
+                flake.style.fontSize = (Math.random() * 1.5 + 0.5) + 'vw';
+                flake.style.animationDuration = (Math.random() * 5 + 4) + 's';
+                flake.style.animationDelay = Math.random() * 5 + 's';
+                snowContainer.appendChild(flake);
+            }
+        }
+        
+        function updateTexts(isXmas) {
+            if(isXmas) {
+                themeLabel.textContent = 'Schnee';
+                loadTitle.textContent = 'Für Papa';
+                loadSub.textContent = 'Von Julius';
+                bgText.textContent = 'Alles Gute zu Weihnachten Papa';
+                bgText.className = 'text-xmas';
+                generateSnow();
+            } else {
+                themeLabel.textContent = 'Default';
+                loadTitle.textContent = 'SYSTEM ACTIVE';
+                loadSub.textContent = 'READY FOR TAKEOFF';
+                bgText.textContent = 'Alfa Romeo Giulia Quadrifoglio';
+                bgText.className = 'text-sport';
+                document.getElementById('snow').innerHTML = '';
+            }
+        }
+
+        xmasSwitch.addEventListener('change', () => {
+            const isXmas = xmasSwitch.checked;
+            document.body.classList.toggle('xmas-on', isXmas);
+            localStorage.setItem('xmasTheme', isXmas ? 'on' : 'off');
+            updateTexts(isXmas);
+        });
+
+        if (localStorage.getItem('xmasTheme') === 'on') {
+            xmasSwitch.checked = true;
+            document.body.classList.add('xmas-on');
+            updateTexts(true);
+        } else {
+            updateTexts(false);
         }
         
         updatePhysics();
@@ -793,8 +676,4 @@ if ((isPressing || pointerDown) && gameStarted) {
     </script>
 </body>
 </html>
-
-
-
-
 
