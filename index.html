@@ -462,19 +462,20 @@
             }
         }
     </script>
-
     <script type="module">
         import * as THREE from 'three';
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        // VARIABLEN//
-        let speed = 0;      // kmh//
-        let rpm = 800;      // u/min//
-        let isPressing = false; // gas//
-        let gameStarted = false;//playsatze//
-        let audioCtx, mainOsc, subOsc, gainNode, lowPass; // motor sound//
+        // VARIABLEN
+        let speed = 0;      
+        let rpm = 800;      
+        let isPressing = false; 
+        let gameStarted = false;
+        let audioCtx, mainOsc, subOsc, gainNode, lowPass; 
         let carModel, controls;
+        let modelLoaded = false;
+        let loadingComplete = false;
 
         // SHIT HOLLEN//
         const speedDisplay = document.getElementById('speed-digital');
@@ -552,7 +553,7 @@
             }
         });
 
-        // AUDIO PAUSE WENN TAB WEG//
+        // AUDIO//
         document.addEventListener('visibilitychange', () => {
             if (audioCtx) {
                 if (document.hidden) audioCtx.suspend();
@@ -575,7 +576,7 @@
             gainNode.gain.value = 0;
         }
 
-        //HANDY QUER CHECK//
+        // HANDY QUER CHECK//
         function checkOrientation() {
             if (window.innerHeight > window.innerWidth) {
                 orientationHint.classList.add('show');
@@ -587,35 +588,24 @@
         window.addEventListener('orientationchange', checkOrientation);
         checkOrientation();
 
-        // SPACE BUTTON KLICK- HANDY UNTERSTÜZUNG//
-        spaceButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (!gameStarted) {
-                gameStarted = true;
-                initAudio();
-                startExplosion.classList.add('show');
-                setTimeout(() => startExplosion.classList.remove('show'), 1200);
-                document.getElementById('loading-screen').classList.add('hide');
-                document.getElementById('master-container').classList.add('show');
-            }
-            isPressing = true;
-        });
-        
+        // START GAME CHECKER//
         function startGameIfNeeded() {
-            if (!gameStarted) {
+            if (!gameStarted && modelLoaded) {
                 gameStarted = true;
                 initAudio();
                 startExplosion.classList.add('show');
                 setTimeout(() => startExplosion.classList.remove('show'), 1200);
                 document.getElementById('loading-screen').classList.add('hide');
                 document.getElementById('master-container').classList.add('show');
+                loadingComplete = true;
             }
         }
         
+        // SPACE BUTTON EVENTS//
         spaceButton.addEventListener('mousedown', (e) => {
             e.preventDefault();
             startGameIfNeeded();
-            isPressing = true;
+            if (loadingComplete) isPressing = true;
         });
         
         spaceButton.addEventListener('mouseup', (e) => {
@@ -626,7 +616,7 @@
         spaceButton.addEventListener('touchstart', (e) => {
             e.preventDefault();
             startGameIfNeeded();
-            isPressing = true;
+            if (loadingComplete) isPressing = true;
         }, { passive: false });
         
         spaceButton.addEventListener('touchend', (e) => {
@@ -634,9 +624,13 @@
             isPressing = false;
         }, { passive: false });
 
-
-        //PHYSICS REAL LIFE TRUST/!
+        // PHYSICS REAL LIFE TRUST//
         function updatePhysics() {
+            if (!loadingComplete) {
+                requestAnimationFrame(updatePhysics);
+                return;
+            }
+
             const SKALA_ENDE_BILD = 7000;  
             const ECHTER_LIMITER = 7250;   
 
@@ -750,7 +744,7 @@
             requestAnimationFrame(updatePhysics);
         }
 
-        //3D MODEL CHECK CHECK//
+        // 3D MODEL CHECK CHECK//
         const viewport = document.getElementById('hologram-viewport');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, viewport.clientWidth / viewport.clientHeight, 0.1, 100);
@@ -776,6 +770,9 @@
             carModel.position.set(0, -0.5, 0);
             carModel.scale.set(0.9, 0.9, 0.9);
             scene.add(carModel);
+            modelLoaded = true;
+        }, undefined, (error) => {
+            console.error('3D Model Error:', error);
         });
 
         window.addEventListener('resize', () => {
@@ -790,10 +787,12 @@
             if (carModel) carModel.rotation.y += 0.005; 
             renderer.render(scene, camera);
         }
+        
         updatePhysics();
         animate3D();
         checkOrientation();
     </script>
 </body>
 </html>
+
 
