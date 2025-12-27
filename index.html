@@ -2,10 +2,13 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <!--WARUM SO KOMENTARE 1. 2.SO CECK MAN OB QUER FORMAT IS-->
+    <meta name="screen-orientation" content="landscape">
     <title>Alfa Romeo Giulia - Precision & Christmas Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* FARBEN */
+        /*FARBEN*/
         :root {
             --accent: #ff0000;
             --glass: rgba(255, 255, 255, 0.05);
@@ -25,6 +28,16 @@
             user-select: none;
             transition: background 0.8s ease-in-out; 
         }
+
+        /*HANDY QUER*/
+        .orientation-hint {
+            position: fixed; inset: 0; z-index: 9999; background: #000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: #fff; font-family: 'Orbitron', sans-serif; text-align: center; font-size: 3vh;
+            display: none;
+        }
+        .orientation-hint.show { display: flex; }
+        .orientation-hint img { width: 30vh; height: 30vh; margin-bottom: 2vh; opacity: 0.8; }
 
         body.xmas-on { background: var(--xmas-bg); }
 
@@ -118,7 +131,6 @@
         #snow { 
             position: fixed; inset: 0; pointer-events: none; z-index: 100;
             display: none; width: 100vw; height: 100vh;
-            z-index: 1;
         }
         body.xmas-on #snow { display: block; }
         
@@ -127,9 +139,7 @@
             top: -5vh; 
             color: #e8f4fd; 
             font-size: clamp(10px, 1.5vw, 25px);
-            animation-name: snowfall;
-            animation-timing-function: linear;
-            animation-iteration-count: infinite;
+            animation: snowfall linear infinite;
             opacity: 0.8;
             text-shadow: 0 0 5px rgba(255,255,255,0.8);
         }
@@ -188,6 +198,7 @@
         }
         @keyframes loadFill { 0% { width: 0%; } 100% { width: 100%; } }
 
+        /*SPACE BUTTON - KLICK MICH */
         .loading-press {
             margin-top: 2.5vw; font-size: 1vw; letter-spacing: 0.2vw; text-transform: uppercase;
             padding: 0.8vw 1.8vw; border-radius: 999px;
@@ -196,9 +207,21 @@
             animation: pulse 1.4s ease-in-out infinite alternate;
             transition: all 0.5s;
             backdrop-filter: blur(12px);
+            cursor: pointer;
         }
         body.xmas-on .loading-press {
             border: 2px solid var(--xmas-silver); background: rgba(0,0,0,0.4);
+        }
+        .loading-press:hover, .loading-press:active {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--accent);
+        }
+        body.xmas-on .loading-press:hover, body.xmas-on .loading-press:active {
+            box-shadow: 0 0 25px var(--xmas-accent);
+        }
+        /*HANDY*/
+        @media (hover: none) and (pointer: coarse) {
+            .loading-press:active { transform: scale(0.95); }
         }
         .loading-press .key {
             border-radius: 6px; padding: 0.3vw 0.9vw; border: 1px solid rgba(255,255,255,0.3);
@@ -239,7 +262,7 @@
             box-shadow: 0 0 60px rgba(0, 191, 255, 0.4), inset 0 0 60px rgba(192, 192, 192, 0.15);
         }
 
-        /* WACKEL EFFEKTE*/
+        /* WACKELN WOW*/
         .gas-mild { animation: tachoShakeMild 0.18s infinite; }
         .gas-medium { animation: tachoShakeMedium 0.14s infinite; }
         .gas-hard { animation: tachoShakeHard 0.10s infinite; }
@@ -265,7 +288,6 @@
         body.xmas-on .fact-card {
             border-left-color: var(--xmas-silver);
         }
-        .fact-card h3 { font-size: 0.7vw; margin: 0; color: var(--accent); letter-spacing: 2px; transition: color 0.5s; }
         body.xmas-on .fact-card h3 { color: var(--xmas-silver); text-shadow: 0 0 12px var(--xmas-silver); }
         .fact-card p { font-size: 0.9vw; margin: 5px 0 0; opacity: 0.8; }
         
@@ -287,19 +309,15 @@
         body.xmas-on .needle {
             box-shadow: 0 0 25px rgba(192, 192, 192, 0.9);
         }
-        /*SCHWANZ hehehehehhehehehehhehehehehehhehehehhehehehehheheheheheh*/
+        /* SCHWANZ heheheh */
         .needle::after {
             content: "";
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 2.9vw;
+            position: absolute; top: 100%; left: 0;
+            width: 100%; height: 2.9vw;
             background: linear-gradient(to bottom, #c0c0c0 0%, rgba(255,255,255,0.2) 60%, transparent 100%);
             box-shadow: 0 0 15px rgba(192, 192, 192, 0.5);
             border-radius: 0 0 2px 2px;
         }
-
 
         #hologram-viewport {
             position: absolute; top: 50%; left: 50.7%; transform: translate(-50%, -50%);
@@ -324,14 +342,14 @@
         
         .data-box b { 
             font-size: 2.2vw; color: #fff; 
-            text-shadow: none !important; 
+            text-shadow: none; 
             transition: text-shadow 0.5s; 
         }
         body.xmas-on .data-box b { color: var(--xmas-silver); }
 
         .limit-flicker { 
-            color: #ff0000 !important;
-            text-shadow: 0 0 10px red !important;
+            color: #ff0000;
+            text-shadow: 0 0 10px red;
             animation: flicker 0.1s infinite;
         }
         @keyframes flicker { 
@@ -344,6 +362,7 @@
             border: 1px solid var(--accent); background: rgba(0,0,0,0.8);
             color: #fff; font-size: 0.9vw; display: flex; align-items: center; gap: 0.7vw;
             z-index: 60; opacity: 0.7; transition: all 0.5s;
+            cursor: pointer;
         }
         body.xmas-on #drive-hint {
             border-color: var(--xmas-silver);
@@ -357,9 +376,20 @@
             border-color: var(--xmas-silver);
             background: rgba(0, 191, 255, 0.3);
         }
+        .orientation-hint .rotate-icon {
+            width: 30vh; height: 30vh; 
+            background: linear-gradient(45deg, #ff0000, #00bfff); 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 20vh; margin-bottom: 2vh;
+        }
     </style>
 </head>
 <body>
+    <div class="orientation-hint" id="orientation-hint">
+        <div class="rotate-icon">↻</div>
+        <div><b>QUER DREHEN</b><br>(<</div>
+    </div>
 
     <div id="theme-toggle">
         <span id="theme-label">Switch</span>
@@ -384,7 +414,7 @@
         <div class="loading-bar">
             <div class="loading-fill"></div>
         </div>
-        <div class="loading-press">
+        <div class="loading-press" id="space-button">
             Drücke <span class="key" style="margin: 0 5px;">LEERTASTE</span> zum Starten
         </div>
     </div>
@@ -438,14 +468,15 @@
         import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        let speed = 0;      
-        let rpm = 800;      
-        let isPressing = false;
-        let gameStarted = false;
-        let audioCtx, mainOsc, subOsc, gainNode, lowPass;
+        // VARIABLEN//
+        let speed = 0;      // kmh//
+        let rpm = 800;      // u/min//
+        let isPressing = false; // gas//
+        let gameStarted = false;//playsatze//
+        let audioCtx, mainOsc, subOsc, gainNode, lowPass; // motor sound//
         let carModel, controls;
 
-        //sachen holen
+        // SHIT HOLLEN//
         const speedDisplay = document.getElementById('speed-digital');
         const gearDisplay = document.getElementById('gear');
         const tachoBg = document.getElementById('tacho-bg');
@@ -457,7 +488,10 @@
         const loadSub = document.querySelector('.loading-sub');
         const bgText = document.getElementById('bg-text');
         const startExplosion = document.getElementById('start-explosion');
+        const spaceButton = document.getElementById('space-button');
+        const orientationHint = document.getElementById('orientation-hint');
 
+        // SCHNEEEEEEEEEE//
         function generateSnow() {
             const snowContainer = document.getElementById('snow');
             snowContainer.innerHTML = '';
@@ -478,6 +512,7 @@
             snowContainer.innerHTML = '';
         }
 
+        // THEME SWITCH//
         function updateTexts(isXmas) {
             if(isXmas) {
                 themeLabel.textContent = 'Schnee';
@@ -517,14 +552,11 @@
             }
         });
 
-        // ton aus wenn man tab wechselt sonst nervt es
+        // AUDIO PAUSE WENN TAB WEG//
         document.addEventListener('visibilitychange', () => {
             if (audioCtx) {
-                if (document.hidden) {
-                    audioCtx.suspend();
-                } else {
-                    audioCtx.resume();
-                }
+                if (document.hidden) audioCtx.suspend();
+                else audioCtx.resume();
             }
         });
 
@@ -543,136 +575,167 @@
             gainNode.gain.value = 0;
         }
 
-function updatePhysics() {
-    // --- SETUP ---
-    const SKALA_ENDE_BILD = 7000;  
-    const ECHTER_LIMITER = 7250;   
-
-    const idleRpm = 850;
-    const dragCoefficient = 0.0000210; 
-    const motorPowerFactor = 7.3;     
-    const friction = 0.04;            
-
-    // 1. PHYSIK
-    if (isPressing && gameStarted) {
-        let engineForce = motorPowerFactor * (1.0 - (speed / 450)); 
-        let airDrag = (speed * speed) * dragCoefficient;
-        let netAccel = engineForce - airDrag - friction;
-        speed = Math.max(0, speed + netAccel * 0.18); 
-    } else {
-        let coastingDrag = (speed * speed * dragCoefficient) + 0.6;
-        speed = Math.max(0, speed - coastingDrag * 0.12);
-    }
-
-    // 2. GETRIEBE
-    const gearRatios = [11.2, 17.5, 25.1, 31.5, 40.8, 51.0, 60.3, 76.0];
-    
-    let gearIdx = 1;
-    if (speed > 238) gearIdx = 6; 
-    else if (speed > 188) gearIdx = 5;
-    else if (speed > 145) gearIdx = 4;
-    else if (speed > 95) gearIdx = 3;
-    else if (speed > 55) gearIdx = 2;
-    else gearIdx = 1;
-    
-    let displayGear = speed < 2 ? "P" : gearIdx;
-
-    // 3. RPM
-    let ratio = gearRatios[gearIdx - 1];
-    let targetRpm = Math.max(idleRpm, (speed / ratio) * 1000);
-
-    // 4. BEGRENZER
-    let isLimiting = (targetRpm >= ECHTER_LIMITER) || (speed >= 308);
-
-    if (isLimiting) {
-        targetRpm = ECHTER_LIMITER - 40 + Math.random() * 80;
-        speed -= 0.4; 
-        
-        if (speedDisplay) speedDisplay.classList.add('limit-flicker');
-        if (gearDisplay) gearDisplay.classList.add('limit-flicker');
-    } else {
-        if (speedDisplay) speedDisplay.classList.remove('limit-flicker');
-        if (gearDisplay) gearDisplay.classList.remove('limit-flicker');
-    }
-
-    // 5. Glättung
-    rpm = rpm + (targetRpm - rpm) * 0.35;
-
-    // 6. NADEL ANIMATION (TUNING UPDATE)
-    const RPM_START_DEG = -230;  
-    const RPM_END_DEG   = 155; 
-    
-    const SPEED_START_DEG = -177.5; 
-    const SPEED_END_DEG   = 150;  
-    const SKALA_MAX_SPEED = 325;
-
-    let time = Date.now();
-
-    if (needleLeft) {
-        const rpmRange = RPM_END_DEG - RPM_START_DEG;
-        let rpmDeg = RPM_START_DEG + (rpm / SKALA_ENDE_BILD) * rpmRange;
-        
-
-        if (isLimiting ) {
-            let wave = Math.sin(time / 30) * 0.1 + Math.cos(time / 80) * 0.3;
-            rpmDeg += wave; 
+        //HANDY QUER CHECK//
+        function checkOrientation() {
+            if (window.innerHeight > window.innerWidth) {
+                orientationHint.classList.add('show');
+            } else {
+                orientationHint.classList.remove('show');
+            }
         }
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
+        checkOrientation();
+
+        // SPACE BUTTON KLICK- HANDY UNTERSTÜZUNG//
+        spaceButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!gameStarted) {
+                gameStarted = true;
+                initAudio();
+                startExplosion.classList.add('show');
+                setTimeout(() => startExplosion.classList.remove('show'), 1200);
+                document.getElementById('loading-screen').classList.add('hide');
+                document.getElementById('master-container').classList.add('show');
+            }
+            isPressing = true;
+        });
         
-        needleLeft.style.transform = `rotate(${rpmDeg}deg)`;
-    }
+        window.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (!gameStarted) {
+                    gameStarted = true;
+                    initAudio();
+                    startExplosion.classList.add('show');
+                    setTimeout(() => startExplosion.classList.remove('show'), 1200);
+                    document.getElementById('loading-screen').classList.add('hide');
+                    document.getElementById('master-container').classList.add('show');
+                }
+                isPressing = true;
+            }
+        });
 
-if (needleRight) {
-    const speedRange = SPEED_END_DEG - SPEED_START_DEG;
-    let speedDeg = SPEED_START_DEG + (speed / SKALA_MAX_SPEED) * speedRange;
-    
-    // Minimales organisches Zittern (FAST UNSICHTBAR)
-    speedDeg += Math.sin(time / 50) * 0.12 + Math.cos(time / 80) * 0.08;
-    
-    needleRight.style.transform = `rotate(${speedDeg.toFixed(1)}deg)`;
-}
+        window.addEventListener('keyup', (e) => { 
+            if (e.code === 'Space') isPressing = false; 
+        });
 
+        //PHYSICS REAL LIFE TRUST/!
+        function updatePhysics() {
+            const SKALA_ENDE_BILD = 7000;  
+            const ECHTER_LIMITER = 7250;   
 
-    // 7. DISPLAYS
-    if (speedDisplay) speedDisplay.innerText = Math.floor(speed);
-    if (gearDisplay) gearDisplay.innerText = displayGear;
+            const idleRpm = 850;
+            const dragCoefficient = 0.0000210; 
+            const motorPowerFactor = 7.3;     
+            const friction = 0.04;            
 
-    // 8. COCKPIT SHAKE
-    if (speed > 10) {
-        if (speed > 300) tachoBg.className = 'gas-insane'; 
-        else if (speed > 200) tachoBg.className = 'gas-hard';
-        else tachoBg.className = 'gas-mild';
-    } else {
-        tachoBg.className = '';
-    }
+            if (isPressing && gameStarted) {
+                let engineForce = motorPowerFactor * (1.0 - (speed / 450)); 
+                let airDrag = (speed * speed) * dragCoefficient;
+                let netAccel = engineForce - airDrag - friction;
+                speed = Math.max(0, speed + netAccel * 0.18); 
+            } else {
+                let coastingDrag = (speed * speed * dragCoefficient) + 0.6;
+                speed = Math.max(0, speed - coastingDrag * 0.12);
+            }
 
-    // 9. SOUND
-    if (audioCtx && !document.hidden) { 
-        let freq = 48 + (rpm / 16.5);
-        mainOsc.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.04);
-        subOsc.frequency.setTargetAtTime(freq / 2.02, audioCtx.currentTime, 0.04); 
-        lowPass.frequency.setTargetAtTime(400 + (rpm / 2.3), audioCtx.currentTime, 0.08);
-        
-        let vol;
-        if (isPressing) {
-            vol = 0.36; 
-        } else {
-            vol = (speed > 5) ? 0.15 : 0.05; 
+            const gearRatios = [11.2, 17.5, 25.1, 31.5, 40.8, 51.0, 60.3, 76.0];
+            
+            let gearIdx = 1;
+            if (speed > 238) gearIdx = 6; 
+            else if (speed > 188) gearIdx = 5;
+            else if (speed > 145) gearIdx = 4;
+            else if (speed > 95) gearIdx = 3;
+            else if (speed > 55) gearIdx = 2;
+            else gearIdx = 1;
+            
+            let displayGear = speed < 2 ? "P" : gearIdx;
+
+            let ratio = gearRatios[gearIdx - 1];
+            let targetRpm = Math.max(idleRpm, (speed / ratio) * 1000);
+
+            let isLimiting = (targetRpm >= ECHTER_LIMITER) || (speed >= 308);
+
+            if (isLimiting) {
+                targetRpm = ECHTER_LIMITER - 40 + Math.random() * 80;
+                speed -= 0.4; 
+                
+                if (speedDisplay) speedDisplay.classList.add('limit-flicker');
+                if (gearDisplay) gearDisplay.classList.add('limit-flicker');
+            } else {
+                if (speedDisplay) speedDisplay.classList.remove('limit-flicker');
+                if (gearDisplay) gearDisplay.classList.remove('limit-flicker');
+            }
+
+            rpm = rpm + (targetRpm - rpm) * 0.35;
+
+            const RPM_START_DEG = -230;  
+            const RPM_END_DEG   = 155; 
+            
+            const SPEED_START_DEG = -177.5; 
+            const SPEED_END_DEG   = 150;  
+            const SKALA_MAX_SPEED = 325;
+
+            let time = Date.now();
+
+            if (needleLeft) {
+                const rpmRange = RPM_END_DEG - RPM_START_DEG;
+                let rpmDeg = RPM_START_DEG + (rpm / SKALA_ENDE_BILD) * rpmRange;
+                
+                if (isLimiting ) {
+                    let wave = Math.sin(time / 30) * 0.1 + Math.cos(time / 80) * 0.3;
+                    rpmDeg += wave; 
+                }
+                
+                needleLeft.style.transform = `rotate(${rpmDeg}deg)`;
+            }
+
+            if (needleRight) {
+                const speedRange = SPEED_END_DEG - SPEED_START_DEG;
+                let speedDeg = SPEED_START_DEG + (speed / SKALA_MAX_SPEED) * speedRange;
+                
+                speedDeg += Math.sin(time / 50) * 0.12 + Math.cos(time / 80) * 0.08;
+                
+                needleRight.style.transform = `rotate(${speedDeg.toFixed(1)}deg)`;
+            }
+
+            if (speedDisplay) speedDisplay.innerText = Math.floor(speed);
+            if (gearDisplay) gearDisplay.innerText = displayGear;
+
+            if (speed > 10) {
+                if (speed > 300) tachoBg.className = 'gas-insane'; 
+                else if (speed > 200) tachoBg.className = 'gas-hard';
+                else tachoBg.className = 'gas-mild';
+            } else {
+                tachoBg.className = '';
+            }
+
+            if (audioCtx && !document.hidden) { 
+                let freq = 48 + (rpm / 16.5);
+                mainOsc.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.04);
+                subOsc.frequency.setTargetAtTime(freq / 2.02, audioCtx.currentTime, 0.04); 
+                lowPass.frequency.setTargetAtTime(400 + (rpm / 2.3), audioCtx.currentTime, 0.08);
+                
+                let vol;
+                if (isPressing) {
+                    vol = 0.36; 
+                } else {
+                    vol = (speed > 5) ? 0.15 : 0.05; 
+                }
+
+                if (isLimiting) {
+                    vol *= (Date.now() % 50 > 25) ? 1.1 : 0.15;
+                }
+                gainNode.gain.setTargetAtTime(vol, audioCtx.currentTime, 0.06);
+            } else if (audioCtx) {
+                gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+            }
+
+            requestAnimationFrame(updatePhysics);
         }
 
-        if (isLimiting) {
-            vol *= (Date.now() % 50 > 25) ? 1.1 : 0.15;
-        }
-        gainNode.gain.setTargetAtTime(vol, audioCtx.currentTime, 0.06);
-
-    } else if (audioCtx) {
-        gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
-    }
-
-    requestAnimationFrame(updatePhysics);
-}
-
-
-        // 3D dings halt check check
+        //3D MODEL CHECK CHECK//
         const viewport = document.getElementById('hologram-viewport');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, viewport.clientWidth / viewport.clientHeight, 0.1, 100);
@@ -706,33 +769,15 @@ if (needleRight) {
             renderer.setSize(viewport.clientWidth, viewport.clientHeight);
         });
 
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                if (!gameStarted) {
-                    gameStarted = true;
-                    initAudio();
-                    
-                    startExplosion.classList.add('show');
-                    setTimeout(() => startExplosion.classList.remove('show'), 1200);
-
-                    document.getElementById('loading-screen').classList.add('hide');
-                    document.getElementById('master-container').classList.add('show');
-                }
-                isPressing = true;
-            }
-        });
-        window.addEventListener('keyup', (e) => { if (e.code === 'Space') isPressing = false; });
-
         function animate3D() {
             requestAnimationFrame(animate3D);
             if (controls) controls.update(); 
             if (carModel) carModel.rotation.y += 0.005; 
             renderer.render(scene, camera);
         }
-
         updatePhysics();
         animate3D();
+        checkOrientation();
     </script>
 </body>
 </html>
