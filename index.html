@@ -198,7 +198,7 @@
         }
         @keyframes loadFill { 0% { width: 0%; } 100% { width: 100%; } }
 
-        /*SPACE BUTTON - KLICK MICH */
+        /*SPACE BUTTON - KLICK MICH UWU*/
         .loading-press {
             margin-top: 2.5vw; font-size: 1vw; letter-spacing: 0.2vw; text-transform: uppercase;
             padding: 0.8vw 1.8vw; border-radius: 999px;
@@ -387,8 +387,7 @@
 </head>
 <body>
     <div class="orientation-hint" id="orientation-hint">
-        <div class="rotate-icon">↻</div>
-        <div><b>QUER DREHEN</b><br>(<</div>
+        <div>Bite Handy drehen </div>
     </div>
 
     <div id="theme-toggle">
@@ -462,197 +461,222 @@
             }
         }
     </script>
-    <script type="module">
-        import * as THREE from 'three';
-        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+  <script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        // VARIABLEN
-        let speed = 0;      
-        let rpm = 800;      
-        let isPressing = false; 
-        let gameStarted = false;
-        let audioCtx, mainOsc, subOsc, gainNode, lowPass; 
-        let carModel, controls;
-        let modelLoaded = false;
-        let loadingComplete = false;
+    // VARIABLEN//
+    let speed = 0;      
+    let rpm = 800;      
+    let isPressing = false; 
+    let gameStarted = false;
+    let audioCtx, mainOsc, subOsc, gainNode, lowPass; 
+    let carModel, controls;
+    let modelLoaded = false;
+    let loadingComplete = false;
 
-        // SHIT HOLLEN//
-        const speedDisplay = document.getElementById('speed-digital');
-        const gearDisplay = document.getElementById('gear');
-        const tachoBg = document.getElementById('tacho-bg');
-        const needleLeft = document.getElementById('needle-rpm');   
-        const needleRight = document.getElementById('needle-speed'); 
-        const xmasSwitch = document.getElementById('xmas-switch');
-        const themeLabel = document.getElementById('theme-label');
-        const loadTitle = document.querySelector('.loading-title');
-        const loadSub = document.querySelector('.loading-sub');
-        const bgText = document.getElementById('bg-text');
-        const startExplosion = document.getElementById('start-explosion');
-        const spaceButton = document.getElementById('space-button');
-        const orientationHint = document.getElementById('orientation-hint');
+    // SHIT HOLLEN
+    const speedDisplay = document.getElementById('speed-digital');
+    const gearDisplay = document.getElementById('gear');
+    const tachoBg = document.getElementById('tacho-bg');
+    const needleLeft = document.getElementById('needle-rpm');   
+    const needleRight = document.getElementById('needle-speed'); 
+    const xmasSwitch = document.getElementById('xmas-switch');
+    const themeLabel = document.getElementById('theme-label');
+    const loadTitle = document.querySelector('.loading-title');
+    const loadSub = document.querySelector('.loading-sub');
+    const bgText = document.getElementById('bg-text');
+    const startExplosion = document.getElementById('start-explosion');
+    const spaceButton = document.getElementById('space-button');
+    const orientationHint = document.getElementById('orientation-hint');
 
-        // SCHNEEEEEEEEEE//
-        function generateSnow() {
-            const snowContainer = document.getElementById('snow');
-            snowContainer.innerHTML = '';
-            for (let i = 0; i < 70; i++) {
-                let flake = document.createElement('div');
-                flake.className = 'snowflake';
-                flake.innerHTML = '❄️';
-                flake.style.left = Math.random() * 100 + 'vw';
-                flake.style.fontSize = (Math.random() * 1.5 + 0.5) + 'vw';
-                flake.style.animationDuration = (Math.random() * 5 + 4) + 's';
-                flake.style.animationDelay = Math.random() * 5 + 's';
-                snowContainer.appendChild(flake);
-            }
+    // SCHNEEEEEEEEEE//
+    function generateSnow() {
+        const snowContainer = document.getElementById('snow');
+        snowContainer.innerHTML = '';
+        for (let i = 0; i < 70; i++) {
+            let flake = document.createElement('div');
+            flake.className = 'snowflake';
+            flake.innerHTML = '❄️';
+            flake.style.left = Math.random() * 100 + 'vw';
+            flake.style.fontSize = (Math.random() * 1.5 + 0.5) + 'vw';
+            flake.style.animationDuration = (Math.random() * 5 + 4) + 's';
+            flake.style.animationDelay = Math.random() * 5 + 's';
+            snowContainer.appendChild(flake);
         }
-        
-        function removeSnow() {
-            const snowContainer = document.getElementById('snow');
-            snowContainer.innerHTML = '';
-        }
+    }
+    
+    function removeSnow() {
+        const snowContainer = document.getElementById('snow');
+        snowContainer.innerHTML = '';
+    }
 
-        // THEME SWITCH//
-        function updateTexts(isXmas) {
-            if(isXmas) {
-                themeLabel.textContent = 'Schnee';
-                loadTitle.textContent = 'Für Papa';
-                loadSub.textContent = 'Von Julius';
-                bgText.textContent = 'Alles Gute zu Weihnachten Papa';
-                bgText.className = 'text-xmas';
-                generateSnow();
-            } else {
-                themeLabel.textContent = 'Default';
-                loadTitle.textContent = 'SYSTEM ACTIVE';
-                loadSub.textContent = 'READY FOR TAKEOFF OR SMETHIN LIKE THAT';
-                bgText.textContent = 'Alfa Romeo Giulia Quadrifoglio';
-                bgText.className = 'text-sport';
-                removeSnow();
-            }
+    // THEME SWITCH//
+    function updateTexts(isXmas) {
+        if(isXmas) {
+            themeLabel.textContent = 'Schnee';
+            loadTitle.textContent = 'Für Papa';
+            loadSub.textContent = 'Von Julius';
+            bgText.textContent = 'Alles Gute zu Weihnachten Papa';
+            bgText.className = 'text-xmas';
+            generateSnow();
+        } else {
+            themeLabel.textContent = 'Default';
+            loadTitle.textContent = 'SYSTEM ACTIVE';
+            loadSub.textContent = 'READY FOR TAKEOFF OR SMETHIN LIKE THAT';
+            bgText.textContent = 'Alfa Romeo Giulia Quadrifoglio';
+            bgText.className = 'text-sport';
+            removeSnow();
         }
+    }
 
-        const savedTheme = localStorage.getItem('xmasTheme');
-        if (savedTheme === 'on') {
+    const savedTheme = localStorage.getItem('xmasTheme');
+    if (savedTheme === 'on') {
+        document.body.classList.add('xmas-on');
+        xmasSwitch.checked = true;
+        updateTexts(true);
+    } else {
+        updateTexts(false);
+    }
+
+    xmasSwitch.addEventListener('change', () => {
+        if (xmasSwitch.checked) {
             document.body.classList.add('xmas-on');
-            xmasSwitch.checked = true;
+            localStorage.setItem('xmasTheme', 'on');
             updateTexts(true);
         } else {
+            document.body.classList.remove('xmas-on');
+            localStorage.setItem('xmasTheme', 'off');
             updateTexts(false);
         }
+    });
 
-        xmasSwitch.addEventListener('change', () => {
-            if (xmasSwitch.checked) {
-                document.body.classList.add('xmas-on');
-                localStorage.setItem('xmasTheme', 'on');
-                updateTexts(true);
-            } else {
-                document.body.classList.remove('xmas-on');
-                localStorage.setItem('xmasTheme', 'off');
-                updateTexts(false);
-            }
-        });
-
-        // AUDIO//
-        document.addEventListener('visibilitychange', () => {
-            if (audioCtx) {
-                if (document.hidden) audioCtx.suspend();
-                else audioCtx.resume();
-            }
-        });
-
-        function initAudio() {
-            if (audioCtx) return;
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            mainOsc = audioCtx.createOscillator();
-            subOsc = audioCtx.createOscillator();
-            gainNode = audioCtx.createGain();
-            lowPass = audioCtx.createBiquadFilter();
-
-            mainOsc.type = 'sawtooth'; subOsc.type = 'square'; lowPass.type = 'lowpass';
-            mainOsc.connect(lowPass); subOsc.connect(lowPass);
-            lowPass.connect(gainNode); gainNode.connect(audioCtx.destination);
-            mainOsc.start(); subOsc.start();
-            gainNode.gain.value = 0;
+    // AUDIO//
+    document.addEventListener('visibilitychange', () => {
+        if (audioCtx) {
+            if (document.hidden) audioCtx.suspend();
+            else audioCtx.resume();
         }
+    });
 
-        // HANDY QUER CHECK//
-        function checkOrientation() {
-            if (window.innerHeight > window.innerWidth) {
-                orientationHint.classList.add('show');
-            } else {
-                orientationHint.classList.remove('show');
-            }
-        }
-        window.addEventListener('resize', checkOrientation);
-        window.addEventListener('orientationchange', checkOrientation);
-        checkOrientation();
+    function initAudio() {
+        if (audioCtx) return;
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        mainOsc = audioCtx.createOscillator();
+        subOsc = audioCtx.createOscillator();
+        gainNode = audioCtx.createGain();
+        lowPass = audioCtx.createBiquadFilter();
 
-        // START GAME CHECKER//
-        function startGameIfNeeded() {
-            if (!gameStarted && modelLoaded) {
-                gameStarted = true;
-                initAudio();
-                startExplosion.classList.add('show');
-                setTimeout(() => startExplosion.classList.remove('show'), 1200);
-                document.getElementById('loading-screen').classList.add('hide');
-                document.getElementById('master-container').classList.add('show');
-                loadingComplete = true;
-            }
+        mainOsc.type = 'sawtooth'; subOsc.type = 'square'; lowPass.type = 'lowpass';
+        mainOsc.connect(lowPass); subOsc.connect(lowPass);
+        lowPass.connect(gainNode); gainNode.connect(audioCtx.destination);
+        mainOsc.start(); subOsc.start();
+        gainNode.gain.value = 0;
+    }
+
+    //CHECK CHEKER//
+    function checkOrientation() {
+        if (window.innerHeight > window.innerWidth) {
+            orientationHint.classList.add('show');
+        } else {
+            orientationHint.classList.remove('show');
         }
-        
-        // SPACE BUTTON EVENTS//
-        spaceButton.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            startGameIfNeeded();
-            if (loadingComplete) isPressing = true;
-        });
-        
-        spaceButton.addEventListener('mouseup', (e) => {
-            e.preventDefault();
+    }
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', checkOrientation);
+    checkOrientation();
+
+    function startGameIfNeeded() {
+        if (!gameStarted && modelLoaded) {
+            gameStarted = true;
+            initAudio();
+            startExplosion.classList.add('show');
+            setTimeout(() => startExplosion.classList.remove('show'), 1200);
+            document.getElementById('loading-screen').classList.add('hide');
+            document.getElementById('master-container').classList.add('show');
+            loadingComplete = true;
             isPressing = false;
-        });
-        
-        spaceButton.addEventListener('touchstart', (e) => {
+        }
+    }
+
+    function handleInputStart() {
+        startGameIfNeeded();
+    }
+
+    function handleInputHold() {
+        if (loadingComplete) isPressing = true;
+    }
+
+    function handleInputEnd() {
+        isPressing = false;
+    }
+
+    spaceButton.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        handleInputStart();
+        handleInputHold();
+    });
+    
+    spaceButton.addEventListener('mouseup', (e) => {
+        e.preventDefault();
+        handleInputEnd();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
             e.preventDefault();
-            startGameIfNeeded();
-            if (loadingComplete) isPressing = true;
-        }, { passive: false });
-        
-        spaceButton.addEventListener('touchend', (e) => {
+            handleInputStart();
+            handleInputHold();
+        }
+    });
+
+    document.addEventListener('keyup', (e) => {
+        if (e.code === 'Space') {
             e.preventDefault();
-            isPressing = false;
-        }, { passive: false });
+            handleInputEnd();
+        }
+    });
 
-        // PHYSICS REAL LIFE TRUST//
-        function updatePhysics() {
-            if (!loadingComplete) {
-                requestAnimationFrame(updatePhysics);
-                return;
-            }
+    spaceButton.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        handleInputStart();
+        handleInputHold();
+    }, { passive: false });
+    
+    spaceButton.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        handleInputEnd();
+    }, { passive: false });
 
-            const SKALA_ENDE_BILD = 7000;  
-            const ECHTER_LIMITER = 7250;   
+    function updatePhysics() {
+        if (!loadingComplete) {
+            requestAnimationFrame(updatePhysics);
+            return;
+        }
 
-            const idleRpm = 850;
-            const dragCoefficient = 0.0000210; 
-            const motorPowerFactor = 7.3;     
-            const friction = 0.04;            
+        const SKALA_ENDE_BILD = 7000;  
+        const ECHTER_LIMITER = 7250;   
 
-            if (isPressing && gameStarted) {
-                let engineForce = motorPowerFactor * (1.0 - (speed / 450)); 
-                let airDrag = (speed * speed) * dragCoefficient;
-                let netAccel = engineForce - airDrag - friction;
-                speed = Math.max(0, speed + netAccel * 0.18); 
-            } else {
-                let coastingDrag = (speed * speed * dragCoefficient) + 0.6;
-                speed = Math.max(0, speed - coastingDrag * 0.12);
-            }
+        const idleRpm = 850;
+        const dragCoefficient = 0.0000210; 
+        const motorPowerFactor = 7.3;     
+        const friction = 0.04;            
 
-            const gearRatios = [11.2, 17.5, 25.1, 31.5, 40.8, 51.0, 60.3, 76.0];
-            
-            let gearIdx = 1;
-            if (speed > 238) gearIdx = 6; 
+        if (isPressing && gameStarted) {
+            let engineForce = motorPowerFactor * (1.0 - (speed / 450)); 
+            let airDrag = (speed * speed) * dragCoefficient;
+            let netAccel = engineForce - airDrag - friction;
+            speed = Math.max(0, speed + netAccel * 0.18); 
+        } else {
+            let coastingDrag = (speed * speed * dragCoefficient) + 0.6;
+            speed = Math.max(0, speed - coastingDrag * 0.12);
+        }
+
+        const gearRatios = [11.2, 17.5, 25.1, 31.5, 40.8, 51.0, 60.3, 76.0];
+        
+                     let gearIdx = 1;
+            if (speed > 238) gearIdx = 6;
             else if (speed > 188) gearIdx = 5;
             else if (speed > 145) gearIdx = 4;
             else if (speed > 95) gearIdx = 3;
@@ -744,55 +768,57 @@
             requestAnimationFrame(updatePhysics);
         }
 
-        // 3D MODEL CHECK CHECK//
-        const viewport = document.getElementById('hologram-viewport');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(45, viewport.clientWidth / viewport.clientHeight, 0.1, 100);
-        camera.position.set(0, 1.2, 5.5);
-        
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    // 3D MODEL CHECK CHECK//
+    const viewport = document.getElementById('hologram-viewport');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, viewport.clientWidth / viewport.clientHeight, 0.1, 100);
+    camera.position.set(0, 1.2, 5.5);
+    
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+    viewport.appendChild(renderer.domElement);
+
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; controls.enablePan = false;
+    controls.minDistance = 3; controls.maxDistance = 10;
+    
+    scene.add(new THREE.AmbientLight(0xffffff, 2.5));
+    
+    const carLight = new THREE.DirectionalLight(0xffffff, 5);
+    carLight.position.set(5, 5, 5);
+    scene.add(carLight);
+    
+    const loader = new GLTFLoader();
+    loader.load('./alfa.glb', (gltf) => {
+        carModel = gltf.scene;
+        carModel.position.set(0, -0.5, 0);
+        carModel.scale.set(0.9, 0.9, 0.9);
+        scene.add(carModel);
+        modelLoaded = true;
+    }, undefined, (error) => {
+        console.error('3D Model Error:', error);
+        modelLoaded = true;
+    });
+
+    window.addEventListener('resize', () => {
+        camera.aspect = viewport.clientWidth / viewport.clientHeight;
+        camera.updateProjectionMatrix();
         renderer.setSize(viewport.clientWidth, viewport.clientHeight);
-        viewport.appendChild(renderer.domElement);
+    });
 
-        controls = new OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true; controls.enablePan = false;
-        controls.minDistance = 3; controls.maxDistance = 10;
-        
-        scene.add(new THREE.AmbientLight(0xffffff, 2.5));
-        
-        const carLight = new THREE.DirectionalLight(0xffffff, 5);
-        carLight.position.set(5, 5, 5);
-        scene.add(carLight);
-        
-        const loader = new GLTFLoader();
-        loader.load('./alfa.glb', (gltf) => {
-            carModel = gltf.scene;
-            carModel.position.set(0, -0.5, 0);
-            carModel.scale.set(0.9, 0.9, 0.9);
-            scene.add(carModel);
-            modelLoaded = true;
-        }, undefined, (error) => {
-            console.error('3D Model Error:', error);
-        });
-
-        window.addEventListener('resize', () => {
-            camera.aspect = viewport.clientWidth / viewport.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(viewport.clientWidth, viewport.clientHeight);
-        });
-
-        function animate3D() {
-            requestAnimationFrame(animate3D);
-            if (controls) controls.update(); 
-            if (carModel) carModel.rotation.y += 0.005; 
-            renderer.render(scene, camera);
-        }
-        
-        updatePhysics();
-        animate3D();
-        checkOrientation();
-    </script>
+    function animate3D() {
+        requestAnimationFrame(animate3D);
+        if (controls) controls.update(); 
+        if (carModel) carModel.rotation.y += 0.005; 
+        renderer.render(scene, camera);
+    }
+    
+    updatePhysics();
+    animate3D();
+    checkOrientation();
+</script>
 </body>
 </html>
+
 
 
