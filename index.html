@@ -182,56 +182,18 @@
         }
 
         #master-container {
-            position: relative; 
-            width: 100vw; 
-            height: 56.25vw; 
-            max-width: 100vw; 
-            max-height: 56.25vw;
-            margin: auto;
-            top: 50%; 
-            transform: translateY(-50%) scale(0.95); 
-            opacity: 0; 
-            z-index: 10;
+            position: relative; width: 100vw; height: 56.25vw; margin: auto;
+            top: 50%; transform: translateY(-50%) scale(0.95); opacity: 0; z-index: 10;
             transition: opacity 0.8s, transform 0.8s;
             transform-origin: center center;
         }
-
-        @media (max-width: 768px) {
-            #master-container {
-                transform: translateY(-50%) scale(0.85);
-            }
-            #master-container.show {
-                transform: translateY(-50%) scale(0.9);
-            }
-        }
-
-        @media (max-width: 480px) {
-            #master-container {
-                transform: translateY(-50%) scale(0.75);
-            }
-            #master-container.show {
-                transform: translateY(-50%) scale(0.8);
-            }
-        }
-
-        #master-container.show { 
-            opacity: 1; 
-            transform: translateY(-50%) scale(1); 
-        }
+        #master-container.show { opacity: 1; transform: translateY(-50%) scale(1); }
 
         #tacho-bg {
-            position: absolute; 
-            width: 100%; 
-            height: 100%;
-            background-image: url('tacho.png'); 
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 2; 
-            border-radius: 12px; 
-            transition: box-shadow 0.5s;
+            position: absolute; width: 100%; height: 100%;
+            background-image: url('tacho.png'); background-size: 100% 100%;
+            z-index: 2; border-radius: 12px; transition: box-shadow 0.5s;
         }
-        
         body.xmas-on #tacho-bg {
             box-shadow: 0 0 60px rgba(0, 191, 255, 0.4), inset 0 0 60px rgba(192, 192, 192, 0.15);
         }
@@ -424,31 +386,7 @@
         const startExplosion = document.getElementById('start-explosion');
         const startButton = document.getElementById('start-button');
         const orientationHint = document.getElementById('orientation-hint');
-
-        function checkOrientation() {
-            if (!orientationHint) return;
-            if (window.innerHeight > window.innerWidth) orientationHint.classList.add('show');
-            else orientationHint.classList.remove('show');
-        }
-        function checkOrientation() {
-            if (!orientationHint) return;
-            if (window.innerHeight > window.innerWidth) orientationHint.classList.add('show');
-            else orientationHint.classList.remove('show');
-        }
-
-        function updateContainerScale() {
-            const container = document.getElementById('master-container');
-            const screenWidth = window.innerWidth;
-            
-            if (screenWidth < 480) currentScale = 0.8;
-            else if (screenWidth < 768) currentScale = 0.9;
-            else currentScale = 1;
-            
-            if (container && gameStarted) {
-                container.style.transform = `translateY(-50%) scale(${currentScale})`;
-            }
-        }
-
+        
         function tryStartGame() {
             if (!gameStarted && modelLoaded) {
                 gameStarted = true;
@@ -468,24 +406,6 @@
                     controls.enableRotate = true;
                     controls.enableZoom = true;
                 }
-            }
-        }
-
-        let currentScale = 1;
-        function updateContainerScale() {
-            const container = document.getElementById('master-container');
-            const screenWidth = window.innerWidth;
-            
-            if (screenWidth < 480) {
-                currentScale = 0.8;
-            } else if (screenWidth < 768) {
-                currentScale = 0.9;
-            } else {
-                currentScale = 1;
-            }
-            
-            if (container && gameStarted) {
-                container.style.transform = `translateY(-50%) scale(${currentScale})`;
             }
         }
 
@@ -687,6 +607,19 @@
             if (carModel) carModel.rotation.y += 0.005; 
             renderer.render(scene, camera);
         }
+
+        function checkOrientation() {
+            if (!orientationHint) return;
+            if (window.innerHeight > window.innerWidth) orientationHint.classList.add('show');
+            else orientationHint.classList.remove('show');
+        }
+
+        window.addEventListener('resize', () => {
+            checkOrientation();
+            camera.aspect = viewport.clientWidth / viewport.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+        });
 
         window.addEventListener('orientationchange', checkOrientation);
 
