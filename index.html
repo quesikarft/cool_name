@@ -300,10 +300,6 @@
             border-color: var(--xmas-silver);
             background: rgba(0, 191, 255, 0.3);
         }
-        @media (max-width: 768px) {
-              #master-container.mobile-small {
-                transform: scale(0.2) translateY(-5%);
-              }
     </style>
 </head>
 <body>
@@ -390,6 +386,7 @@
         const startExplosion = document.getElementById('start-explosion');
         const startButton = document.getElementById('start-button');
         const orientationHint = document.getElementById('orientation-hint');
+        const container = document.getElementById('master-container');
         
         function tryStartGame() {
             if (!gameStarted && modelLoaded) {
@@ -613,13 +610,31 @@
         }
 
         function checkOrientation() {
-            if (!orientationHint) return;
-            if (window.innerHeight > window.innerWidth) orientationHint.classList.add('show');
-            else orientationHint.classList.remove('show');
+        if (!orientationHint || !container) return;
+        
+        if (window.innerHeight > window.innerWidth) {
+            orientationHint.classList.add('show');
+        } else {
+            orientationHint.classList.remove('show');
+        }
+        }
+
+        function scalephone() {
+        if (!container) return;
+        
+        if (window.innerWidth < 768) {
+            container.style.transform = 'translateY(-50%) scale(0.65)';
+        } else if (window.innerWidth < 1000) {
+            container.style.transform = 'translateY(-50%) scale(0.75)';
+        }
+        else{
+            container.style.transform = 'translateY(-50%) scale(1)';
+        }
         }
 
         window.addEventListener('resize', () => {
             checkOrientation();
+            scalephone();
             camera.aspect = viewport.clientWidth / viewport.clientHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(viewport.clientWidth, viewport.clientHeight);
@@ -678,7 +693,7 @@
         updatePhysics();
         animate3D();
         checkOrientation();
+        scalephone();
     </script>
 </body>
 </html>
-
