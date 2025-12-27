@@ -601,24 +601,39 @@
             isPressing = true;
         });
         
-        window.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                if (!gameStarted) {
-                    gameStarted = true;
-                    initAudio();
-                    startExplosion.classList.add('show');
-                    setTimeout(() => startExplosion.classList.remove('show'), 1200);
-                    document.getElementById('loading-screen').classList.add('hide');
-                    document.getElementById('master-container').classList.add('show');
-                }
-                isPressing = true;
+        function startGameIfNeeded() {
+            if (!gameStarted) {
+                gameStarted = true;
+                initAudio();
+                startExplosion.classList.add('show');
+                setTimeout(() => startExplosion.classList.remove('show'), 1200);
+                document.getElementById('loading-screen').classList.add('hide');
+                document.getElementById('master-container').classList.add('show');
             }
+        }
+        
+        spaceButton.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            startGameIfNeeded();
+            isPressing = true;
         });
+        
+        spaceButton.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            isPressing = false;
+        });
+        
+        spaceButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startGameIfNeeded();
+            isPressing = true;
+        }, { passive: false });
+        
+        spaceButton.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            isPressing = false;
+        }, { passive: false });
 
-        window.addEventListener('keyup', (e) => { 
-            if (e.code === 'Space') isPressing = false; 
-        });
 
         //PHYSICS REAL LIFE TRUST/!
         function updatePhysics() {
@@ -781,3 +796,4 @@
     </script>
 </body>
 </html>
+
