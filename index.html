@@ -361,7 +361,7 @@
 </head>
 <body>
     <div class="orientation-hint" id="orientation-hint">
-        <div><b>QUER DREHEN</b><br>(📱 drehen)</div>
+        <div>Bite 90 Drehen</div>
     </div>
     <div id="theme-toggle">
         <span id="theme-label">Switch</span>
@@ -450,10 +450,12 @@
         let modelLoaded = false;
         let loadingComplete = false;
         let pointerDown = false;
+        let controlsActive = false;
 
         // SHIT HOLLEN//
         const speedDisplay = document.getElementById('speed-digital');
         const gearDisplay = document.getElementById('gear');
+        const driveHint = document.getElementById('drive-hint');
         const tachoBg = document.getElementById('tacho-bg');
         const needleLeft = document.getElementById('needle-rpm');   
         const needleRight = document.getElementById('needle-speed'); 
@@ -585,30 +587,23 @@ function handleInputEnd() {
     isPressing = false;
 }
         // SPACE BUTTON EVENTS//
-document.addEventListener('pointerdown', (e) => {
-    if (e.pointerType === 'mouse' || e.isPrimary) {
-        pointerDown = true;
-                console.log('🖱️ POINTER:', e.pointerType);
-        e.stopImmediatePropagation();
-        startGameIfNeeded();
-        e.preventDefault();
-    }
+spaceButton.addEventListener('pointerdown', (e) => {
+  // nur Button zählt – nix global
+  e.preventDefault();
+  e.stopPropagation();
+
+  pointerDown = true;
+  startGameIfNeeded();
 });
 
-document.addEventListener('pointerup', (e) => {
-    if (e.pointerType === 'mouse' || e.isPrimary) {
-        pointerDown = false;
-        e.preventDefault();
-    }
-});
-
-document.addEventListener('pointerleave', () => {
-    pointerDown = false;
+spaceButton.addEventListener('pointerup', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  pointerDown = false;
 });
 
 document.addEventListener('keydown', (e) => {
     if (e.code === 'Space') {
-                console.log('⌨️ LEERTASTE LOS:', e.code);
         e.preventDefault();
         e.stopImmediatePropagation();
         startGameIfNeeded();
@@ -757,7 +752,7 @@ if ((isPressing || pointerDown) && gameStarted) {
         controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true; 
         controls.enablePan = false;
-        controls.enableRotate = false; // KEIN Konflikt mehr!
+        controls.enableRotate = false;
         controls.enableZoom = false;
         controls.minDistance = 3; 
         controls.maxDistance = 10;
@@ -798,3 +793,7 @@ if ((isPressing || pointerDown) && gameStarted) {
     </script>
 </body>
 </html>
+
+
+
+
