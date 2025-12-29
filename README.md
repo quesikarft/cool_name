@@ -1,31 +1,31 @@
-__Alfa Romeo Giulia Quadrifoglio Cockpit__
-https://weinchten2025.jk.al
+# **Alfa Romeo Giulia Quadrifoglio Cockpit**
+**https://weinchten2025.jk.al**
 Ein klines Projckt von mir für minen Vater als Weinchts Geschenk
 
-Steuerung
+##Steuerung
 Aktion	        Eingabe
 Start	          Leertaste / Klick "Starten"
 Vollgas	        Leertaste halten / Letraste Info Butten drüclen
 3D-Ansicht	    Maus/Touch drehen/zoomen
 Theme	          Toggle oben rechts (Default-Weinchten)
 
-Technische Highlights
-Physik-Engine:
+##Technische Highlights
+###Physik-Engine:
 - Luftwiderstand (dragCoefficient: 0.0000210)
 - Motorleistung (510PS simuliert)
 - Gangwechsel ((8)6 Gänge + Park)
-Audio-Synthesizer:
+###Audio-Synthesizer:
 - Sawtooth + Square Oscillator
 - RPM-abhängige Frequenz (48-500Hz)
 - Dynamische Filter + Volume
 - Gas/Idle/Limit-Modi
-3D-Rendering:
+###3D-Rendering:
 - Three.js GLTFLoader (alfa.glb)
 - OrbitControls (nach Start aktiv)
 - Ambient + Directional Lighting
 - Auto-Rotation (0.005 rad/frame)
 - Responsive Canvas
-Responsive Design:
+###Responsive Design:
 - Handy (<768px): 65% Scale
 - Tablet (768-1000px): 75% Scale  
 - Desktop (>1000px): 100% Scale
