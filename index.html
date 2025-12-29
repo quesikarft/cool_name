@@ -689,6 +689,12 @@
             updateTexts(false);
         }
         
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && document.activeElement === xmasSwitch) {
+                e.preventDefault();
+            }
+        });
+        
         updatePhysics();
         animate3D();
         checkOrientation();
@@ -696,6 +702,7 @@
     </script>
 </body>
 </html>
+
 
 
 
