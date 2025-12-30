@@ -3,11 +3,13 @@
 ##### Ein klines Projckt von mir für minen Vater als Weinchts Geschenk
 
 ## Steuerung
-Aktion	        Eingabe
-Start	          Leertaste / Klick "Starten"
-Vollgas	        Leertaste halten / Letraste Info Butten drüclen
-3D-Ansicht	    Maus/Touch drehen/zoomen
-Theme	          Toggle oben rechts (Default-Weinchten)
+
+| Aktion      | Eingabe                                               |
+| ----------- | ----------------------------------------------------- |
+| Start       | Leertaste / Klick „Starten“                     |
+| Vollgas     | Leertaste halten / Leertaste „Leertaste" Button drücken |
+| 3D-Ansicht  | Maus / Touch drehen / zoomen                              |
+| Theme       | Toggle oben rechts (Default / Weihnachten)             |
 
 ## Technische Highlights
 ### Physik-Engine:
