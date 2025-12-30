@@ -595,13 +595,21 @@
         scene.add(carLight);
         
         const loader = new GLTFLoader();
-        loader.load('./alfa.glb', (gltf) => {
-            carModel = gltf.scene;
-            carModel.position.set(0, -0.5, 0);
-            carModel.scale.set(0.9, 0.9, 0.9);
-            scene.add(carModel);
-            modelLoaded = true;
-        }, undefined, (err) => console.error('3D Error:', err));
+loader.load(
+    './alfa.glb',
+    (gltf) => {
+        carModel = gltf.scene;
+        carModel.position.set(0, -0.5, 0);
+        carModel.scale.set(0.9, 0.9, 0.9);
+        scene.add(carModel);
+        modelLoaded = true;
+    },
+    undefined,
+    (err) => {
+        console.error('3D Error:', err);
+        modelLoaded = true;
+    }
+);
 
         function animate3D() {
             requestAnimationFrame(animate3D);
@@ -703,6 +711,7 @@
     </script>
 </body>
 </html>
+
 
 
 
